@@ -126,8 +126,8 @@ fScore.put(nextNode, dist + h);
 
 
 When running investigative algorithms in the method main, we measure the following properties:
-- **Execution Time** (`endTime` - `startTime`)
-- **Average Time to Process One Node** (`time` / `visitedNodes`)
+- **Execution Time [ms]** (`endTime` - `startTime`)
+- **Average Time to Process One Node [ms]** (`time` / `visitedNodes`)
 - **Number of All Processed Nodes** (`visitedNodes`)
 - **All Nodes (Generated + Processed) in Memory** (`allNodes`)
 - **Maximum Number of Nodes in Memory** (`maxGeneratedNodes`)
@@ -159,3 +159,41 @@ class Tree {
   // ...
 }
 ```
+
+
+# Results
+
+
+Testing of search algorithms is conducted on *input/input5_start.txt* and *input/input5_final.txt*, as they cover a significantly larger state space, which allows the algorithm properties to be best observed.
+
+| Search Algorithm                      | runT   | avgT     | allN   | maxN   | visN   | depth |
+| ------------------------------------- | ------ | -------- | ------ | ------ | ------ | ----- |
+| BFS                                   | 2046   | 0.02059  | 132617 | 53505  | 99362  | 8     |
+| DFS                                   | 864    | 0.13329  | 129579 | 123168 | 6482   | 123096|
+| IDDFS(100)                            | 1639   | 0.08155  | 45694  | 19     | 20098  | 17    |
+| GreedyBestFirstSearch(Boxes-On-Right-Position) | 6      | 0.06061  | 603    | 505    | 99     | 24    |
+| GreedyBestFirstSearch(Sum-Of-X-Y-Distance)     | 38     | 0.09819  | 2063   | 1677   | 387    | 46    |
+| GreedyBestFirstSearch(Wrong-Cols)              | 9      | 0.07258  | 1088   | 965    | 124    | 19    |
+| GreedyBestFirstSearch(Wrong-Rows)              | 3      | 0.03797  | 507    | 429    | 79     | 16    |
+| GreedyyBestFirstSearch(Max-X-Y-Distance)       | 5      | 0.03817  | 735    | 605    | 131    | 36    |
+| A*(Boxes-On-Right-Position)                   | 75     | 0.16854  | 2401   | 1957   | 445    | 8     |
+| A*(Sum-Of-X-Y-Distance)                        | 882    | 0.63317  | 6067   | 4675   | 1393   | 21    |
+| A*(Wrong-Cols)                                 | 14792  | 3.13789  | 17689  | 12976  | 4714   | 10    |
+| A*(Wrong-Rows)                                 | 23152  | 3.89306  | 21497  | 15551  | 5947   | 9     |
+| A*(Max-X-Y-Distance)                           | 81     | 0.125    | 2970   | 2323   | 648    | 15    |
+
+
+# Findings
+
+
+Based on the obtained results, I compared the search algorithms with already known properties assigned to a certain algorithm.
+
+**BFS (Breadth First Search) algorithm** returned the shortest path among all the algorithms, which is trivial since it works on the principle of queue, therefore it generated and processed the most nodes. From that fact, I can conclude that it consumes the most resources (memory).
+
+**DFS (Depth First Search) algorithm** is faster and less wasteful compared to the previous algorithm. Due to the depth-first traversal, it has to generate more nodes. For the same reason, the path is longer, and the depth is greater.
+
+**IDDFS (Iterative Deepening Depth First Search) algorithm** combines the advantages of the two above two algorithms, which is evident in its speed and lower resource consumption.
+
+**Greedy Best First Search** is the algorithm that performed the fastest in our research using the `Wrong-Rows` heuristic, it returned a fairly good solution in only 3ms. In all five cases, the effectiveness of the algorithm is nicely visible, which achieved the lowest number of processed nodes.
+
+**Astar Search Algorithm** is the algorithm that should surpass all the algorithms in the battle with time. In this case, this did not happened, only the `Max-X-Y-Distance` heuristic bearly held with the best times. It also proved to be the most effective heuristic, because it significantly outperformed the other four and three heuristics in the previous algorithm. The weakness of the algorithm is evident in the consumption of resources, which is higher than the above *Greedy Best First Search algorithm*. We can console ourselves with the returned paths, which are the shortest of all.
