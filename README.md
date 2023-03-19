@@ -1,5 +1,6 @@
 # Analysis-of-Search-Algorithms
 
+
 Conducting and examining **Search Algorithms** within a basic testing environment:  
 - *Breadth-First Search Algorithm*
 - *Depth-First Search Algorithm*
@@ -7,14 +8,18 @@ Conducting and examining **Search Algorithms** within a basic testing environmen
 - *Greedy Best-First Search Algorithm*
 - *Astar Search Algorithm*
 
+
 ## Testing Environment
+
 
 The warehouse has P parking positions, where each position can accommodate N equally sized boxes. The figure below shows a warehouse with P=4 and N=5. The warehouse is managed by a robotic arm, which can only access the top box at each parking position. The robotic arm recognizes the command: "MOVE p,r", which takes the top box at the p-th position (1 ≤ p ≤ P) and places it on top of the stack at the r-th position (1 ≤ r ≤ P). If the r-th position is empty, the box is placed on the ground. If the p-th position is empty, nothing happens.
 The operator of the robotic arm is provided with the start and final configurations of the warehouse, and then seeks the shortest sequence of commands that will rearrange the boxes according to the desired pattern.
 
 ![image](https://user-images.githubusercontent.com/75141731/226174223-eb451ebd-9681-4a29-935e-749c309c0c26.png)
 
+
 ## AnalysisOfSearchAlgorithms.java Structure
+
 
 ```java
 class AnalysisOfSearchAlgorithms {
@@ -41,7 +46,9 @@ class Move {
 }
 ```
 
+
 ## In-Depth Code Explaination
+
 
 The program receives two text files as input, representing the start and final configurations of boxes in a warehouse, converts them to a two-dimensional string array, and prints them to the screen.
 ```java
@@ -82,7 +89,9 @@ tree.GreedyBestFirstSearch(0);
 tree.Astar(0);
 ```
 
+
 ## Heuristics
+
 
 Two search algorithms, *GreedyBestFirstSearch* and *Astar* are implemented using five different heuristics:
 - `heuristicBoxesOnRightPosition` *number of boxes in the correct position*
@@ -104,11 +113,49 @@ In the code of both algorithms, `switch` statement is used to select which heuri
 ```java
 int h;
 switch (heuristic) {
-    case 0 -> { h = Node.heuristicBoxesOnRightPosition(nextNode, endNode); }
-    case 1 -> { h = Node.heuristicSumOfDistances(nextNode, endNode); }
-    case 2 -> { h = Node.heuristicWrongCols(nextNode, endNode); }
-    case 3 -> { h = Node.heuristicWrongRows(nextNode, endNode); }
-    default -> { h = Node.heuristicMaxXYDistance(nextNode, endNode); }
+  case 0 -> { h = Node.heuristicBoxesOnRightPosition(nextNode, endNode); }
+  case 1 -> { h = Node.heuristicSumOfDistances(nextNode, endNode); }
+  case 2 -> { h = Node.heuristicWrongCols(nextNode, endNode); }
+  case 3 -> { h = Node.heuristicWrongRows(nextNode, endNode); }
+  default -> { h = Node.heuristicMaxXYDistance(nextNode, endNode); }
 }
 fScore.put(nextNode, dist + h);
+```
+
+## Statistics
+
+
+When running investigative algorithms in the method main, we measure the following properties:
+- **Execution Time** (`endTime` - `startTime`)
+- **Average Time to Process One Node** (`time` / `visitedNodes`)
+- **Number of All Processed Nodes** (`visitedNodes`)
+- **All Nodes (Generated + Processed) in Memory** (`allNodes`)
+- **Maximum Number of Nodes in Memory** (`maxGeneratedNodes`)
+- **Depth of Solution** (`depthOfSolution`)
+
+After each algorithm execution, the counters for the properties need to be reset with the method `resetCounters()`.
+```java
+public static void executeAlgorithm(Tree tree, int i, String algorithm) {
+  String path = "";
+  long startTime = System.currentTimeMillis();
+  switch (i) {
+    case 0 -> path = tree.BFS();
+    // ...
+  }
+  long endTime = System.currentTimeMillis();
+  printStats(algorithm, (endTime - startTime), tree.allNodes, 
+  tree.depthOfSolution,  tree.visitedNodes, tree.maxGeneratedNodes, path);
+  tree.resetCounters();
+}
+```
+
+The above properties, except for `Execution Time` and `Average Time` to process one node, which are calculated, are directly measured during the execution of the algorithm. In fact, these are attributes of the `Tree` class.
+```java
+class Tree {
+  int allNodes = 0;
+  int visitedNodes = 0;
+  int maxGeneratedNodes = 0;
+  int depthOfSolution = 0;
+  // ...
+}
 ```
