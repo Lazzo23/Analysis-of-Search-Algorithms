@@ -47,7 +47,7 @@ class Move {
 ```
 
 
-## In-Depth Code Explaination
+## In-Depth Code Explanation
 
 
 The program receives two text files as input, representing the start and final configurations of boxes in a warehouse, converts them to a two-dimensional string array, and prints them to the screen.
